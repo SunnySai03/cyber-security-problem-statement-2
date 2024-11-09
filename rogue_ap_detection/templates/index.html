@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rogue Access Points</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Rogue Access Points</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>MAC Address</th>
+                <th>SSID</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody id="rogue-aps-table">
+            <!-- Data will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        fetch('/api/rogue_aps')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById("rogue-aps-table");
+                data.forEach(ap => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${ap.mac}</td>
+                        <td>${ap.ssid}</td>
+                        <td><input type="checkbox" /></td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    </script>
+</body>
+</html>
